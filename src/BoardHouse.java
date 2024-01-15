@@ -4,7 +4,6 @@ public class BoardHouse {
 
     private int _id;
     private int player;
-    private Random dado;
     private int position;
     private int status;
     private int penalty;
@@ -13,14 +12,16 @@ public class BoardHouse {
     public BoardHouse() {
         this._id = 0;
         this.player = 0;
-        this.dado = new Random();
         this.position = 0;
         this.status = 0;
         this.penalty = 0;
         this.next = this;
         this.prev = this;
     }
-
+    public int dado(){
+        Random dado = new Random();
+        return dado.nextInt(6)+1;
+    }
     public int get_id() {
         return _id;
     }
@@ -37,13 +38,6 @@ public class BoardHouse {
         this.player = player;
     }
 
-    public Random getDado() {
-        return dado;
-    }
-
-    public void setDado(Random dado) {
-        this.dado = dado;
-    }
 
     public int getPosition() {
         return position;
@@ -84,4 +78,6 @@ public class BoardHouse {
     public void setPrev(BoardHouse prev) {
         this.prev = prev;
     }
+
+
 }
