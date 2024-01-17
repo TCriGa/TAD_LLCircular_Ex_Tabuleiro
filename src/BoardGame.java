@@ -1,7 +1,16 @@
 public class BoardGame extends BoardHouse {
 
     private BoardHouse init;
+
+    public BoardHouse getInit() {
+        return init;
+    }
+
     private int qtd;
+
+    public int getQtd() {
+        return qtd;
+    }
 
     public boolean isEmpty() {
         return init == null;
@@ -95,4 +104,72 @@ public class BoardGame extends BoardHouse {
         return true;
     }
 
+    public void printElements(BoardHouse boardHouse) {
+        int position = boardHouse.getPosition();
+        if (position < 10) {
+            System.out.println(position);
+            switch (getStatus()) {
+                case 0:
+                    System.out.println("Vazio");
+                    break;
+                case 1:
+                    System.out.println("Casa marcada - 1x " + boardHouse.getPlayer());
+                    break;
+                case 2:
+                    System.out.println("Casa marcada - 2x " + boardHouse.getPlayer());
+                    break;
+            }
+        }
+
+    }
+
+    public void printElementsClockwise() {
+        int positionCurrent = 1;
+        if (!isEmpty()) {
+            BoardHouse element = init;
+            do {
+                printElements(element);
+                element = element.getNext();
+            } while (positionCurrent <= getQtd());
+        } else {
+            System.out.println("Lista vazia");
+        }
+    }
+
+    public Player nextPlayer() {
+        if (BoardGameMain.nowPlayer == 0 || BoardGameMain.nowPlayer > BoardGameMain.qtdPlayer) {
+            BoardGameMain.nowPlayer = 1;
+        } else {
+            BoardGameMain.nowPlayer++;
+        }
+        return BoardGameMain.nPlayer[BoardGameMain.nowPlayer];
+    }
+
+    public BoardHouse getPositionClockwise(int dice, BoardHouse position) {
+        int positionCurrent = 1;
+        if (dice > qtd || dice <= 0) {
+            return null;
+        }
+        BoardHouse aux = position;
+        while (positionCurrent < dice) {
+            aux = aux.getNext();
+            positionCurrent++;
+        }
+        return aux;
+    }
+
+    public BoardHouse getPositionCounterclockwise(int dice, BoardHouse position) {
+        int positionCurrent = 1;
+        if (dice > qtd || dice <= 0) {
+            return null;
+        }
+        BoardHouse aux = position;
+        while (positionCurrent < dice) {
+            aux = aux.getPrev();
+            positionCurrent++;
+        }
+        return aux;
+    }
 }
+
+

@@ -10,7 +10,6 @@ public class BoardHouse {
     private BoardHouse next;
     private BoardHouse prev;
     public BoardHouse() {
-        this._id = 0;
         this.player = 0;
         this.position = 0;
         this.status = 0;
@@ -18,16 +17,9 @@ public class BoardHouse {
         this.next = this;
         this.prev = this;
     }
-    public int dado(){
+    public int rollDice(){
         Random dado = new Random();
         return dado.nextInt(6)+1;
-    }
-    public int get_id() {
-        return _id;
-    }
-
-    public void set_id(int _id) {
-        this._id = _id;
     }
 
     public int getPlayer() {
@@ -43,10 +35,6 @@ public class BoardHouse {
         return position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -57,10 +45,6 @@ public class BoardHouse {
 
     public int getPenalty() {
         return penalty;
-    }
-
-    public void setPenalty(int penalty) {
-        this.penalty = penalty;
     }
 
     public BoardHouse getNext() {
