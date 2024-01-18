@@ -3,24 +3,12 @@ import java.util.Scanner;
 public class BoardGameMain {
     static int qtdHouse;
     static int qtdPlayer;
-    static int nowPlayer = 0;
-
     static int playNumber = 0;
-    static final Player[] nPlayer = new Player[4];
 
-    private static Player playerN(int i) {
-        return switch (i) {
-            case 1 -> nPlayer[0];
-            case 2 -> nPlayer[1];
-            case 3 -> nPlayer[2];
-            case 4 -> nPlayer[3];
-            default -> null;
-        };
-    }
-
+    static BoardGame boardGame = new BoardGame();
+    static Player nextPlayer = boardGame.nextPlayer();
     public static void main(String[] args) {
-        BoardGame boardGame = new BoardGame();
-        Player nextPlayer = boardGame.nextPlayer();
+
 
         Scanner sc = new Scanner(System.in);
 
@@ -36,12 +24,8 @@ public class BoardGameMain {
         if (qtdHouse < 10) {
             System.out.println("O numero de casas deve ser maior que 10");
         }
-        if (qtdPlayer <= 4 && qtdPlayer >= 2) {
+        if (qtdPlayer > 2) {
             System.out.println("O numero de jogadores deve ser maior que 2 e menor q 4");
-        }
-
-        if (nextPlayer.getNumber() == 1) {
-            playNumber++;
         }
 
         while (true) {
@@ -51,7 +35,16 @@ public class BoardGameMain {
             System.out.println("     Número da Jogada " + playNumber);
             System.out.println("==========================================================");
             boardGame.printElementsClockwise();
-            System.out.println("********* Próximo a jogar -> " + nextPlayer.getName());
+            for (int i = 1; i <= qtdPlayer; i++) {
+                System.out.println("//************ Informe o nome do jogador " + i + " -> ");
+                String name = sc.next();
+                boardGame.printElementsClockwise();
+                System.out.println("==========================================================");
+                System.out.println("Jogador " + i + " -> " + name + " adicionado");
+                System.out.println("==========================================================");
+            }
+
+            System.out.println("********* Próximo a jogar -> " + boardGame.getPlayer());
             System.out.println("==========================================================");
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%% MENU %%%%%%%%%%%%%%%%%%%%%%%%%%");
             System.out.println("===================== 1 - Iniciar o jogo =================");
@@ -66,15 +59,9 @@ public class BoardGameMain {
                     System.out.println("===================== 1 - Sentido horario =====================");
                     System.out.println("===================== 2 - Sentido anti-horario ================");
                     int direction = sc.nextInt();
+                    BoardHouse currentHouse = boardGame.getInit();
+
                     BoardHouse newHouse;
-                    BoardHouse currentHouse = nextPlayer.getHouse();
-
-                    if (currentHouse == null) {
-                        currentHouse = boardGame.getInit();
-                    } else {
-                        dice++;
-                    }
-
                     if (direction == 1) {
                         newHouse = boardGame.getPositionClockwise(dice, currentHouse);
                     } else {
@@ -131,5 +118,6 @@ public class BoardGameMain {
 
         }
     }
+
 }
 

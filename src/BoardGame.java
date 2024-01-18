@@ -1,5 +1,4 @@
 public class BoardGame extends BoardHouse {
-
     private BoardHouse init;
 
     public BoardHouse getInit() {
@@ -7,6 +6,7 @@ public class BoardGame extends BoardHouse {
     }
 
     private int qtd;
+    private int nowPlayer;
 
     public int getQtd() {
         return qtd;
@@ -15,7 +15,6 @@ public class BoardGame extends BoardHouse {
     public boolean isEmpty() {
         return init == null;
     }
-
 
     public void insertElementInit(BoardHouse element) {
         if (!isEmpty()) {
@@ -135,18 +134,31 @@ public class BoardGame extends BoardHouse {
             System.out.println("Lista vazia");
         }
     }
-
+    Player[] nPlayer = new Player[1];
+    public Player numberPlayer(int n) {
+        return switch (n) {
+            case 1 -> nPlayer[0];
+            case 2 -> nPlayer[1];
+            case 3 -> nPlayer[2];
+            case 4 -> nPlayer[3];
+            default -> null;
+        };
+    }
     public Player nextPlayer() {
-        if (BoardGameMain.nowPlayer == 0 || BoardGameMain.nowPlayer > BoardGameMain.qtdPlayer) {
-            BoardGameMain.nowPlayer = 1;
-        } else {
-            BoardGameMain.nowPlayer++;
+        if (nowPlayer == 0) {
+            nowPlayer = 1;
+        } else{
+            nowPlayer++;
+            if (nowPlayer < qtd) {
+                nowPlayer = 1;
+            }
         }
-        return BoardGameMain.nPlayer[BoardGameMain.nowPlayer];
+
+        return numberPlayer(nowPlayer);
     }
 
     public BoardHouse getPositionClockwise(int dice, BoardHouse position) {
-        int positionCurrent = 1;
+        int positionCurrent = 0;
         if (dice > qtd || dice <= 0) {
             return null;
         }
@@ -170,6 +182,9 @@ public class BoardGame extends BoardHouse {
         }
         return aux;
     }
+
+
+
 }
 
 

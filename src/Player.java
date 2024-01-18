@@ -10,7 +10,6 @@ public Player(int number, String name) {
     this.number = number;
     this.name = name;
     lostTime = 0;
-    this.house = null;
 }
 
     public int getNumber() {

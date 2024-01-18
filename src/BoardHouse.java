@@ -1,8 +1,6 @@
 import java.util.Random;
 
 public class BoardHouse {
-
-    private int _id;
     private int player;
     private int position;
     private int status;
@@ -37,6 +35,10 @@ public class BoardHouse {
 
     public int getStatus() {
         return status;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public void setStatus(int status) {
