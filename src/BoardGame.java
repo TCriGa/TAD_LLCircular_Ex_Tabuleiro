@@ -8,6 +8,10 @@ public class BoardGame extends BoardHouse {
     private int qtd;
     private int nowPlayer;
 
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
     public int getQtd() {
         return qtd;
     }
@@ -16,25 +20,41 @@ public class BoardGame extends BoardHouse {
         return init == null;
     }
 
+    private void _add() {
+        if (isEmpty()) {
+            return;
+        }
+        BoardHouse aux = getInit();
+        for (int i = 1; i < getQtd(); i++) {
+            aux.setPosition(i);
+            aux = aux.getNext();
+        }
+    }
+
     public void insertElementInit(BoardHouse element) {
         if (!isEmpty()) {
             element.setNext(init);
-            element.setPrev(element.getPrev());
+            element.setPrev(init.getPrev());
             init.setPrev(element);
             element.getPrev().setNext(element);
         }
         init = element;
         qtd++;
+        _add();
     }
 
+
+
     public void insertElementLast(BoardHouse element) {
-        if (!isEmpty()) {
+        if (isEmpty()) {
+            insertElementInit(element);
+        } else {
             element.setNext(init);
             element.setPrev(element.getPrev());
             init.getPrev().setNext(element);
             init.setPrev(element);
+            init = element;
         }
-        init = element;
         qtd++;
     }
 
@@ -134,20 +154,22 @@ public class BoardGame extends BoardHouse {
             System.out.println("Lista vazia");
         }
     }
-    Player[] nPlayer = new Player[1];
+
+
     public Player numberPlayer(int n) {
         return switch (n) {
-            case 1 -> nPlayer[0];
-            case 2 -> nPlayer[1];
-            case 3 -> nPlayer[2];
-            case 4 -> nPlayer[3];
+            case 1 -> BoardGameMain.nPlayer[0];
+            case 2 -> BoardGameMain.nPlayer[1];
+            case 3 -> BoardGameMain.nPlayer[2];
+            case 4 -> BoardGameMain.nPlayer[3];
             default -> null;
         };
     }
+
     public Player nextPlayer() {
         if (nowPlayer == 0) {
             nowPlayer = 1;
-        } else{
+        } else {
             nowPlayer++;
             if (nowPlayer < qtd) {
                 nowPlayer = 1;
@@ -157,13 +179,14 @@ public class BoardGame extends BoardHouse {
         return numberPlayer(nowPlayer);
     }
 
-    public BoardHouse getPositionClockwise(int dice, BoardHouse position) {
-        int positionCurrent = 0;
-        if (dice > qtd || dice <= 0) {
+
+    public BoardHouse getPositionClockwise(int position, BoardHouse element) {
+        int positionCurrent = 1;
+        if (position > qtd || position <= 0) {
             return null;
         }
-        BoardHouse aux = position;
-        while (positionCurrent < dice) {
+        BoardHouse aux = element;
+        while (positionCurrent < position) {
             aux = aux.getNext();
             positionCurrent++;
         }
@@ -182,7 +205,6 @@ public class BoardGame extends BoardHouse {
         }
         return aux;
     }
-
 
 
 }

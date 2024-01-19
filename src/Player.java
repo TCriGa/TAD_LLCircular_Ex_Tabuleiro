@@ -9,6 +9,7 @@ public class Player {
 public Player(int number, String name) {
     this.number = number;
     this.name = name;
+    this.house = null;
     lostTime = 0;
 }
 

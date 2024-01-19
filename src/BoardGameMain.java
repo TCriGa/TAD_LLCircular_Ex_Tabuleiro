@@ -4,11 +4,11 @@ public class BoardGameMain {
     static int qtdHouse;
     static int qtdPlayer;
     static int playNumber = 0;
+    static Player[] nPlayer = new Player[4];
 
     static BoardGame boardGame = new BoardGame();
-    static Player nextPlayer = boardGame.nextPlayer();
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
@@ -20,30 +20,47 @@ public class BoardGameMain {
 
         System.out.println("//************* Informe a quantidade desejda de jogadores -> ");
         qtdPlayer = sc.nextInt();
-
+        boardGame.setQtd(qtdHouse);
         if (qtdHouse < 10) {
             System.out.println("O numero de casas deve ser maior que 10");
         }
         if (qtdPlayer > 2) {
             System.out.println("O numero de jogadores deve ser maior que 2 e menor q 4");
         }
+        for (int i = qtdHouse; i >= 1; i--) {
+            BoardHouse boardHouse = new BoardHouse();
+            boardHouse.setPosition(i);
+            boardGame.insertElementInit(boardHouse);
+        }
+        for (int i = 1; i <=qtdPlayer; i++) {
+            System.out.println("//************ Informe o nome do jogador " + i + " -> ");
+            String name = sc.next();
+            System.out.println("==========================================================");
+            System.out.println("Jogador " + i + " -> " + name + " adicionado");
+            System.out.println("==========================================================");
+            Player playerX = new Player(i, name);
+            switch (i) {
+                case 1 -> nPlayer[0] = playerX;
+                case 2 -> nPlayer[1] = playerX;
+                case 3 -> nPlayer[2] = playerX;
+                case 4 -> nPlayer[3] = playerX;
+            }
 
+        }
+        LOOP1:
         while (true) {
             System.out.println("==========================================================");
             System.out.println("     JOGO DE TABULEIRO COM " + qtdHouse);
             System.out.println("     Número de  jogadores: " + qtdPlayer);
-            System.out.println("     Número da Jogada " + playNumber);
             System.out.println("==========================================================");
-            boardGame.printElementsClockwise();
-            for (int i = 1; i <= qtdPlayer; i++) {
-                System.out.println("//************ Informe o nome do jogador " + i + " -> ");
-                String name = sc.next();
-                boardGame.printElementsClockwise();
-                System.out.println("==========================================================");
-                System.out.println("Jogador " + i + " -> " + name + " adicionado");
-                System.out.println("==========================================================");
-            }
 
+
+             Player nextPlayer = boardGame.nextPlayer();
+
+            if (nextPlayer.getNumber() == 1) {
+                playNumber++;
+            }
+            System.out.println("     Número da Jogada " + playNumber);
             System.out.println("********* Próximo a jogar -> " + boardGame.getPlayer());
             System.out.println("==========================================================");
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%% MENU %%%%%%%%%%%%%%%%%%%%%%%%%%");
@@ -59,16 +76,28 @@ public class BoardGameMain {
                     System.out.println("===================== 1 - Sentido horario =====================");
                     System.out.println("===================== 2 - Sentido anti-horario ================");
                     int direction = sc.nextInt();
-                    BoardHouse currentHouse = boardGame.getInit();
-
+                    BoardHouse currentHouse = nextPlayer.getHouse();
+                    if (currentHouse == null) {
+                        currentHouse = boardGame.getInit();
+                    } else {
+                        dice++;
+                    }
                     BoardHouse newHouse;
+                    if (direction == 1) {
+                        if(nextPlayer.getLostTime() > 0){
+                            System.out.println("Perdeu a vez");
+                            nextPlayer.setLostTime(nextPlayer.getLostTime() - 1);
+                            continue LOOP1;
+                        }
+                    }
                     if (direction == 1) {
                         newHouse = boardGame.getPositionClockwise(dice, currentHouse);
                     } else {
                         newHouse = boardGame.getPositionCounterclockwise(dice, currentHouse);
                     }
                     nextPlayer.setHouse(newHouse);
-                    nextPlayer.setLostTime(newHouse.getPenalty());
+                   //nextPlayer.setLostTime(newHouse.getPenalty());
+
                     //Se a casa for vazia, coloca o jogador na casa
                     if (newHouse.getStatus() == 0) {
                         newHouse.setStatus(1);
